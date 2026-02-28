@@ -1,0 +1,34 @@
+{
+  "name": "@leninpkg/baileys-auth",
+  "version": "0.0.1",
+  "description": "Generic baileys auth library, that lets you choice where to save the data",
+  "author": "Renan Dutra <leninpkg@gmail.com>",
+  "license": "MIT",
+  "type": "commonjs",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc"
+  },
+  "keywords": [
+    "baielys",
+    "auth",
+    "authentication",
+    "generic"
+  ],
+  "files": [
+    "lib/**/*"
+  ],
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "baileys": ">=7.0.0-rc.1"
+  },
+  "peerDependenciesMeta": {
+    "baileys": {
+      "optional": false
+    }
+  }
+}
