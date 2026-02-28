@@ -10,6 +10,7 @@ Generic auth-state adapter for [Baileys](https://github.com/WhiskeySockets/Baile
 - Ready-to-use JSON replacer (`JsonReplacer`)
 - Ready-to-use SQLite datasource (`SqliteDataSource`)
 - Optional PostgreSQL datasource (`PostgresDataSource`)
+- Optional MySQL datasource (`MySqlDataSource`)
 
 ## 📦 Installation
 
@@ -28,6 +29,16 @@ pnpm add pg
 ```
 
 > `pg` is an optional peer dependency and is only needed when you use `PostgresDataSource`.
+
+### Optional: MySQL support
+
+If you want to use the MySQL datasource, install `mysql2` in your app:
+
+```bash
+pnpm add mysql2
+```
+
+> `mysql2` is an optional peer dependency and is only needed when you use `MySqlDataSource`.
 
 ## 🚀 Quick Start (SQLite)
 
@@ -66,7 +77,7 @@ async function main() {
 main().catch(console.error);
 ```
 
-## 🐘 PostgreSQL Variant
+## 🐘 PostgreSQL
 
 `PostgresDataSource` is intentionally not re-exported from the package root, so users who do not install `pg` are not affected.
 
@@ -116,6 +127,56 @@ new PostgresDataSource({
 });
 ```
 
+## 🐬 MySQL
+
+`MySqlDataSource` is intentionally not re-exported from the package root, so users who do not install `mysql2` are not affected.
+
+Import it directly from its module path:
+
+```ts
+import { MySqlDataSource } from "@leninpkg/baileys-auth/lib/datasources/mysql-data-source";
+```
+
+Usage example:
+
+```ts
+import pino from "pino";
+import { makeWASocket } from "baileys";
+import { BaileysAuth, JsonReplacer } from "@leninpkg/baileys-auth";
+import { MySqlDataSource } from "@leninpkg/baileys-auth/lib/datasources/mysql-data-source";
+
+async function main() {
+  const auth = await BaileysAuth.fromSession({
+    sessionId: "my-session",
+    dataSource: new MySqlDataSource(process.env.DATABASE_URL!),
+    dataReplacer: new JsonReplacer(),
+  });
+
+  const sock = makeWASocket({
+    logger: pino({ level: "silent" }),
+    auth: auth.authState,
+  });
+
+  sock.ev.on("creds.update", async () => {
+    await auth.saveCredentials();
+  });
+}
+
+main().catch(console.error);
+```
+
+You can also initialize MySQL with `PoolOptions`:
+
+```ts
+new MySqlDataSource({
+  host: "localhost",
+  port: 3306,
+  user: "root",
+  password: "root",
+  database: "baileys",
+});
+```
+
 ## 🧩 Core Concepts
 
 ### `BaileysAuth<T>`
@@ -161,6 +222,13 @@ Use `JsonReplacer` for JSON-based serialization with Baileys `BufferJSON` suppor
 - Supports `write` (upsert), `read`, `delete`
 - Exposes `close()` for graceful shutdown
 
+### `MySqlDataSource`
+
+- Uses `mysql2/promise` pool API
+- Creates table automatically (`session_data`)
+- Supports `write` (upsert), `read`, `delete`
+- Exposes `close()` for graceful shutdown
+
 ## 🛠️ Build
 
 ```bash
@@ -189,6 +257,10 @@ Root package exports:
 Deep export (optional Postgres):
 
 - `@leninpkg/baileys-auth/lib/datasources/postgres-data-source`
+
+Deep export (optional MySQL):
+
+- `@leninpkg/baileys-auth/lib/datasources/mysql-data-source`
 
 ## 🧪 Development
 
