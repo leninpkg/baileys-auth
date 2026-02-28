@@ -21,14 +21,19 @@
     "lib/**/*"
   ],
   "devDependencies": {
+    "@types/pg": "^8.16.0",
     "typescript": "^5.9.3"
   },
   "peerDependencies": {
-    "baileys": ">=7.0.0-rc.1"
+    "baileys": ">=7.0.0-rc.1",
+    "pg": ">=8.0.0"
   },
   "peerDependenciesMeta": {
     "baileys": {
       "optional": false
+    },
+    "pg": {
+      "optional": true
     }
   }
 }
