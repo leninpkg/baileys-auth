@@ -1,0 +1,4 @@
+allowBuilds:
+  baileys: true
+  protobufjs: true
+  sharp: true
