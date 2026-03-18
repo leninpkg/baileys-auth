@@ -37,6 +37,13 @@ export interface IDataSource<T> {
    * @returns A promise that resolves when the value is successfully deleted.
    */
   delete(sessionId: string, key: string): Promise<void>;
+
+  /**
+   * Deletes all persisted data associated with a specific session.
+   * @param sessionId Unique identifier of the session.
+   * @returns A promise that resolves when all data for the session is successfully deleted.
+   */
+  flush(sessionId: string): Promise<void>;
 }
 
 /**

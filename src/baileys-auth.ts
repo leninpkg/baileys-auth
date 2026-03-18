@@ -81,7 +81,7 @@ export class BaileysAuth<T> {
   /**
    * Gets the current in-memory authentication credentials.
    */
-  public get credentials(): AuthenticationCreds {
+  public get creds(): AuthenticationCreds {
     return this._credentials;
   }
 
@@ -91,7 +91,7 @@ export class BaileysAuth<T> {
    * The returned object exposes credential data and signal key handlers for
    * retrieving and persisting key material through the configured data source.
    */
-  public get authState(): AuthenticationState {
+  public get state(): AuthenticationState {
     return {
       creds: this._credentials,
       keys: {
@@ -135,7 +135,7 @@ export class BaileysAuth<T> {
    *
    * @returns A promise resolved when credentials are successfully saved.
    */
-  public async saveCredentials(): Promise<void> {
+  public async saveCreds(): Promise<void> {
     const replaced = this._dataReplacer.replace(this._credentials);
     await this._dataSource.write(this._sessionId, "credentials", replaced);
   }
@@ -145,7 +145,7 @@ export class BaileysAuth<T> {
    *
    * @returns A promise resolved when persisted credentials are deleted.
    */
-  public async clearCredentials(): Promise<void> {
+  public async clearCreds(): Promise<void> {
     this._credentials = initAuthCreds();
     await this._dataSource.delete(this._sessionId, "credentials");
   }
@@ -155,8 +155,8 @@ export class BaileysAuth<T> {
    *
    * @returns A promise resolved when session data cleanup completes.
    */
-  public async clearAllSessionData(): Promise<void> {
-    await this._dataSource.delete(this._sessionId, "credentials");
+  public async clearData(): Promise<void> {
+    await this._dataSource.flush(this._sessionId);
   }
 
   /**
@@ -189,5 +189,4 @@ export class BaileysAuth<T> {
   private toKey(type: string, id: string): string {
     return `${type}:${id}`;
   }
-
 }
