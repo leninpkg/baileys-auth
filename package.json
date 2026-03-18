@@ -1,6 +1,6 @@
 {
   "name": "@leninpkg/baileys-auth",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Generic baileys auth library, that lets you choice where to save the data",
   "author": "Renan Dutra <leninpkg@gmail.com>",
   "license": "MIT",
