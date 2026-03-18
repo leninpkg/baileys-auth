@@ -39,6 +39,11 @@ export class SqliteDataSource implements IDataSource<string> {
     this._db.prepare("DELETE FROM session_data WHERE session_id = ? AND data_key = ?").run(sessionId, key);
   }
 
+  public async flush(sessionId: string): Promise<void> {
+    this._db.prepare("DELETE FROM session_data WHERE session_id = ?").run(sessionId);
+  }
+
+
   public close(): void {
     this._db.close();
   }
